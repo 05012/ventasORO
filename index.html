@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ventas ORO · Catálogo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --gold:       #c8922a;
+      --gold-light: #e8b84b;
+      --gold-pale:  #f5e6c4;
+      --orange:     #d4600a;
+      --orange-light:#f07c2a;
+      --green:      #2d5a3d;
+      --green-light:#3d7a52;
+      --green-pale: #e8f2ec;
+      --cream:      #faf7f0;
+      --dark:       #1a1208;
+      --warm-gray:  #6b5f4e;
+    }
+
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body {
+      font-family: 'Jost', sans-serif;
+      background: var(--cream);
+      color: var(--dark);
+      overflow-x: hidden;
+    }
+
+    /* ══════════════════════════════════════════
+       COVER
+    ═══════════════════════════════════════════ */
+    .cover {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      background: var(--dark);
+    }
+
+    /* Subtle noise texture */
+    .cover::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 1;
+      opacity: .4;
+    }
+
+    /* Gold gradient mesh */
+    .cover-mesh {
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 70% 60% at 50% 30%, rgba(200,146,42,.18) 0%, transparent 65%),
+        radial-gradient(ellipse 40% 50% at 15% 70%, rgba(212,96,10,.12) 0%, transparent 55%),
+        radial-gradient(ellipse 35% 40% at 85% 75%, rgba(45,90,61,.15) 0%, transparent 55%);
+      pointer-events: none; z-index: 1;
+      animation: meshPulse 8s ease-in-out infinite alternate;
+    }
+    @keyframes meshPulse {
+      from { opacity:.7; }
+      to   { opacity:1; }
+    }
+
+    /* Decorative gold lines */
+    .cover-lines {
+      position: absolute; inset: 0;
+      pointer-events: none; z-index: 2;
+      overflow: hidden;
+    }
+    .cover-lines::before, .cover-lines::after {
+      content: '';
+      position: absolute;
+      width: 1px;
+      height: 100%;
+      background: linear-gradient(180deg, transparent, rgba(200,146,42,.3) 40%, rgba(200,146,42,.3) 60%, transparent);
+      animation: lineFade 3s ease both;
+    }
+    .cover-lines::before { left: 12%; animation-delay: .5s; }
+    .cover-lines::after  { right: 12%; animation-delay: .8s; }
+    @keyframes lineFade { from{height:0;top:0}to{height:100%;top:0} }
+
+    /* Horizontal ornament lines */
+    .cover-ornament {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      width: min(500px, 85%);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      pointer-events: none; z-index: 3;
+    }
+    .cover-ornament-top    { top: 10%; }
+    .cover-ornament-bottom { bottom: 10%; }
+    .orn-line { flex: 1; height: 1px; background: linear-gradient(90deg, transparent, rgba(200,146,42,.5), transparent); }
+    .orn-diamond {
+      width: 6px; height: 6px;
+      background: var(--gold);
+      transform: rotate(45deg);
+      flex-shrink: 0;
+      animation: diamondPulse 3s ease-in-out infinite;
+    }
+    @keyframes diamondPulse { 0%,100%{opacity:.5}50%{opacity:1} }
+
+    /* Floating gold circles */
+    .gold-circle {
+      position: absolute;
+      border-radius: 50%;
+      border: 1px solid rgba(200,146,42,.15);
+      pointer-events: none; z-index: 2;
+      animation: circlePulse ease-in-out infinite;
+    }
+    .gc-1 { width:320px;height:320px;top:5%;right:-80px; animation-duration:6s; }
+    .gc-2 { width:180px;height:180px;bottom:10%;left:-40px; animation-duration:8s;animation-delay:1s; }
+    .gc-3 { width:80px;height:80px;top:30%;left:8%; animation-duration:5s;animation-delay:.5s;border-color:rgba(212,96,10,.2); }
+    .gc-4 { width:50px;height:50px;bottom:25%;right:10%; animation-duration:7s;animation-delay:2s;border-color:rgba(45,90,61,.25); }
+    @keyframes circlePulse{0%,100%{transform:scale(1);opacity:.4}50%{transform:scale(1.05);opacity:.8}}
+
+    /* Corner brackets */
+    .cover-bracket {
+      position: absolute;
+      width: 40px; height: 40px;
+      pointer-events: none; z-index: 4;
+    }
+    .cb-tl { top:28px;left:32px;border-top:1.5px solid var(--gold);border-left:1.5px solid var(--gold);opacity:0;animation:fadeIn .8s .6s ease forwards; }
+    .cb-tr { top:28px;right:32px;border-top:1.5px solid var(--gold);border-right:1.5px solid var(--gold);opacity:0;animation:fadeIn .8s .8s ease forwards; }
+    .cb-bl { bottom:28px;left:32px;border-bottom:1.5px solid var(--gold);border-left:1.5px solid var(--gold);opacity:0;animation:fadeIn .8s 1s ease forwards; }
+    .cb-br { bottom:28px;right:32px;border-bottom:1.5px solid var(--gold);border-right:1.5px solid var(--gold);opacity:0;animation:fadeIn .8s 1.2s ease forwards; }
+    @keyframes fadeIn{to{opacity:1}}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+
+    /* Cover content */
+    .cover-content {
+      position: relative; z-index: 10;
+      text-align: center;
+      padding: 2rem;
+    }
+
+    .cover-eyebrow {
+      font-family: 'Jost', sans-serif;
+      font-size: .62rem;
+      font-weight: 400;
+      letter-spacing: .45em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.8rem;
+      opacity: 0;
+      animation: fadeUp .7s .4s ease forwards;
+    }
+
+    .cover-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(4rem, 12vw, 9rem);
+      font-weight: 300;
+      line-height: .95;
+      letter-spacing: -.01em;
+      color: var(--cream);
+      opacity: 0;
+      animation: fadeUp .9s .6s ease forwards;
+    }
+    .cover-title .title-gold {
+      font-style: italic;
+      color: var(--gold-light);
+      display: block;
+    }
+
+    .cover-divider {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin: 2.2rem auto;
+      width: fit-content;
+      opacity: 0;
+      animation: fadeUp .7s .9s ease forwards;
+    }
+    .div-line { width: 60px; height: 1px; background: linear-gradient(90deg, transparent, var(--gold)); }
+    .div-line-r { background: linear-gradient(270deg, transparent, var(--gold)); }
+    .div-gem {
+      width: 8px; height: 8px;
+      background: var(--gold-light);
+      transform: rotate(45deg);
+      box-shadow: 0 0 8px rgba(232,184,75,.4);
+    }
+
+    .cover-subtitle {
+      font-family: 'Jost', sans-serif;
+      font-size: .75rem;
+      font-weight: 300;
+      letter-spacing: .3em;
+      text-transform: uppercase;
+      color: rgba(250,247,240,.4);
+      opacity: 0;
+      animation: fadeUp .7s 1.1s ease forwards;
+    }
+
+    /* Scroll hint */
+    .scroll-hint {
+      position: absolute;
+      bottom: 2.5rem; left: 50%;
+      transform: translateX(-50%);
+      display: flex; flex-direction: column;
+      align-items: center; gap: 8px;
+      color: rgba(200,146,42,.4);
+      font-size: .58rem;
+      letter-spacing: .25em;
+      text-transform: uppercase;
+      z-index: 10;
+      opacity: 0;
+      animation: fadeUp .8s 1.8s ease forwards;
+    }
+    .scroll-arrow {
+      width: 1px; height: 36px;
+      background: linear-gradient(180deg, transparent, rgba(200,146,42,.4));
+      animation: scrollBounce 2s ease-in-out infinite;
+    }
+    @keyframes scrollBounce{0%,100%{transform:scaleY(1);opacity:.4}50%{transform:scaleY(1.4);opacity:1}}
+
+    /* ══════════════════════════════════════════
+       CATALOG SECTION
+    ═══════════════════════════════════════════ */
+    .catalog {
+      background: var(--cream);
+      padding: 6rem 2rem 5rem;
+    }
+
+    .catalog-header {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+    .catalog-eyebrow {
+      font-size: .62rem;
+      font-weight: 400;
+      letter-spacing: .4em;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: .8rem;
+    }
+    .catalog-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.8rem, 4vw, 3rem);
+      font-weight: 400;
+      color: var(--dark);
+      letter-spacing: -.01em;
+    }
+    .catalog-title em { color: var(--green); font-style: italic; }
+    .catalog-divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 1.4rem auto 0;
+      width: fit-content;
+    }
+    .cdiv-line { width: 50px; height: 1px; }
+    .cdiv-line-l { background: linear-gradient(90deg, transparent, var(--orange)); }
+    .cdiv-line-r { background: linear-gradient(270deg, transparent, var(--green)); }
+    .cdiv-gem { width: 6px; height: 6px; transform: rotate(45deg); background: var(--gold); }
+
+    /* Product grid */
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+      gap: 2rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    /* Product card */
+    .product-card {
+      background: white;
+      border-radius: 4px;
+      overflow: hidden;
+      border: 1px solid rgba(200,146,42,.12);
+      transition: transform .35s ease, box-shadow .35s ease;
+      position: relative;
+    }
+    .product-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--orange), var(--gold-light), var(--green));
+      opacity: 0;
+      transition: opacity .3s ease;
+    }
+    .product-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 60px rgba(26,18,8,.12), 0 4px 16px rgba(200,146,42,.08);
+    }
+    .product-card:hover::before { opacity: 1; }
+
+    /* Image area */
+    .card-img-wrap {
+      position: relative;
+      height: 240px;
+      overflow: hidden;
+      background: linear-gradient(135deg, #1a1208 0%, #2d1e08 50%, #1a1208 100%);
+    }
+    .card-img-wrap img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform .5s ease;
+      display: block;
+    }
+    .product-card:hover .card-img-wrap img { transform: scale(1.06); }
+
+    /* Placeholder for image (when no img src) */
+    .card-img-placeholder {
+      width: 100%; height: 100%;
+      display: flex; align-items: center; justify-content: center;
+      background: linear-gradient(135deg, #1a1208, #2d2010, #1a1208);
+      position: relative;
+      overflow: hidden;
+    }
+    .card-img-placeholder::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image: radial-gradient(rgba(200,146,42,.06) 1px, transparent 1px);
+      background-size: 20px 20px;
+    }
+    .placeholder-icon {
+      opacity: .2;
+      animation: iconPulse 3s ease-in-out infinite;
+    }
+    @keyframes iconPulse{0%,100%{opacity:.15}50%{opacity:.3}}
+
+    /* Category badge */
+    .card-badge {
+      position: absolute;
+      top: 14px; left: 14px;
+      font-size: .58rem;
+      font-weight: 500;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      padding: .3rem .8rem;
+      border-radius: 2px;
+      backdrop-filter: blur(8px);
+    }
+    .badge-orange { background: rgba(212,96,10,.85); color: white; }
+    .badge-green  { background: rgba(45,90,61,.85);  color: white; }
+    .badge-gold   { background: rgba(200,146,42,.85); color: var(--dark); }
+
+    /* Card number */
+    .card-num {
+      position: absolute;
+      bottom: 14px; right: 14px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.8rem;
+      font-weight: 300;
+      color: rgba(255,255,255,.12);
+      line-height: 1;
+    }
+
+    /* Card body */
+    .card-body { padding: 1.6rem 1.6rem 1.8rem; }
+
+    .card-category {
+      font-size: .6rem;
+      font-weight: 400;
+      letter-spacing: .3em;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: .5rem;
+    }
+
+    .card-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.4rem;
+      font-weight: 400;
+      color: var(--dark);
+      line-height: 1.2;
+      margin-bottom: .5rem;
+    }
+
+    .card-material {
+      font-size: .7rem;
+      font-weight: 300;
+      letter-spacing: .12em;
+      color: var(--warm-gray);
+      font-style: italic;
+      margin-bottom: 1rem;
+    }
+
+    .card-desc {
+      font-size: .84rem;
+      font-weight: 300;
+      line-height: 1.75;
+      color: #5a4e3e;
+      margin-bottom: 1.4rem;
+    }
+
+    /* Card footer */
+    .card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 1.1rem;
+      border-top: 1px solid rgba(200,146,42,.12);
+    }
+
+    .card-price {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--green);
+      line-height: 1;
+    }
+    .card-price span {
+      font-family: 'Jost', sans-serif;
+      font-size: .65rem;
+      font-weight: 300;
+      color: var(--warm-gray);
+      display: block;
+      margin-bottom: .2rem;
+    }
+
+    .btn-consultar {
+      font-family: 'Jost', sans-serif;
+      font-size: .65rem;
+      font-weight: 500;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: white;
+      background: var(--orange);
+      padding: .55rem 1.2rem;
+      border: none;
+      border-radius: 2px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background .25s ease, transform .15s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn-consultar:hover { background: var(--green); transform: translateY(-1px); }
+    .btn-consultar svg { transition: transform .2s; }
+    .btn-consultar:hover svg { transform: translateX(3px); }
+
+    /* ── FOOTER ─────────────────────────── */
+    footer {
+      background: var(--dark);
+      padding: 3rem 2rem;
+      text-align: center;
+    }
+    .footer-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.8rem;
+      font-weight: 300;
+      color: var(--gold-light);
+      letter-spacing: .05em;
+      margin-bottom: .6rem;
+    }
+    .footer-logo em { font-style: italic; }
+    .footer-sub {
+      font-size: .62rem;
+      font-weight: 300;
+      letter-spacing: .35em;
+      text-transform: uppercase;
+      color: rgba(200,146,42,.35);
+    }
+    .footer-div {
+      display: flex; align-items: center; gap: 12px;
+      margin: 1.4rem auto;
+      width: fit-content;
+    }
+    .footer-div .orn-line { background: linear-gradient(90deg, transparent, rgba(200,146,42,.3)); width: 50px; }
+    .footer-div .orn-line-r { background: linear-gradient(270deg, transparent, rgba(200,146,42,.3)); }
+  </style>
+</head>
+<body>
+
+<!-- ══════════ COVER ══════════ -->
+<section class="cover">
+  <div class="cover-mesh"></div>
+  <div class="cover-lines"></div>
+
+  <div class="gold-circle gc-1"></div>
+  <div class="gold-circle gc-2"></div>
+  <div class="gold-circle gc-3"></div>
+  <div class="gold-circle gc-4"></div>
+
+  <div class="cover-bracket cb-tl"></div>
+  <div class="cover-bracket cb-tr"></div>
+  <div class="cover-bracket cb-bl"></div>
+  <div class="cover-bracket cb-br"></div>
+
+  <!-- Ornament lines -->
+  <div class="cover-ornament cover-ornament-top">
+    <div class="orn-line"></div>
+    <div class="orn-diamond"></div>
+    <div class="orn-line"></div>
+    <div class="orn-diamond"></div>
+    <div class="orn-line"></div>
+  </div>
+  <div class="cover-ornament cover-ornament-bottom">
+    <div class="orn-line"></div>
+    <div class="orn-diamond"></div>
+    <div class="orn-line"></div>
+    <div class="orn-diamond"></div>
+    <div class="orn-line"></div>
+  </div>
+
+  <div class="cover-content">
+    <p class="cover-eyebrow">Colección Exclusiva · Joyería Fina</p>
+    <h1 class="cover-title">
+      Ventas
+      <span class="title-gold">ORO</span>
+    </h1>
+    <div class="cover-divider">
+      <div class="div-line"></div>
+      <div class="div-gem"></div>
+      <div class="div-line div-line-r"></div>
+    </div>
+    <p class="cover-subtitle">Piezas únicas · Oro de ley · Certificado de autenticidad</p>
+  </div>
+
+  <div class="scroll-hint">
+    <span>Explorar colección</span>
+    <div class="scroll-arrow"></div>
+  </div>
+</section>
+
+<!-- ══════════ CATALOG ══════════ -->
+<section class="catalog">
+  <div class="catalog-header">
+    <p class="catalog-eyebrow">Nuestra colección</p>
+    <h2 class="catalog-title">Piezas de <em>Oro Puro</em></h2>
+    <div class="catalog-divider">
+      <div class="cdiv-line cdiv-line-l"></div>
+      <div class="cdiv-gem"></div>
+      <div class="cdiv-line cdiv-line-r"></div>
+    </div>
+  </div>
+
+  <div class="product-grid">
+
+    <!-- CARD 1 -->
+    <article class="product-card">
+      <div class="card-img-wrap">
+        <div class="card-img-placeholder">
+         <img src="imagenes-oro/dije-trebol.jpg">
+          </svg>
+        </div>
+        <span class="card-badge badge-gold">Anillos</span>
+        <span class="card-num">01</span>
+      </div>
+      <div class="card-body">
+        <p class="card-category">Anillos</p>
+        <h3 class="card-name">Anillo Solitario Eterno</h3>
+        <p class="card-material">Oro 18k · Diamante central</p>
+        <p class="card-desc">Diseño clásico con diamante de 0.5 ct en montura de 4 puntas. Símbolo de elegancia atemporal, perfecto para compromiso o uso diario.</p>
+        <div class="card-footer">
+          <div class="card-price">
+            <span>Precio</span>$12,500
+          </div>
+          <a href="#" class="btn-consultar">
+            Consultar
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+              <path d="M2 6h8M6 2l4 4-4 4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </article>
+
+    <!-- CARD 2 -->
+    <article class="product-card">
+      <div class="card-img-wrap">
+        <div class="card-img-placeholder">
+          <img src="imagenes-oro/aretes-luna.jpg">
+          </svg>
+        </div>
+        <span class="card-badge badge-orange">Collares</span>
+        <span class="card-num">02</span>
+      </div>
+      <div class="card-body">
+        <p class="card-category">Collares</p>
+        <h3 class="card-name">Gargantilla Dorada</h3>
+        <p class="card-material">Oro 14k · Cadena forzada</p>
+        <p class="card-desc">Cadena de eslabones forzados de 45 cm con cierre de seguridad. Versátil y resistente, ideal para usar sola o con dije.</p>
+        <div class="card-footer">
+          <div class="card-price">
+            <span>Precio</span>$4,800
+          </div>
+          <a href="#" class="btn-consultar">
+            Consultar
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+              <path d="M2 6h8M6 2l4 4-4 4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </article>
+
+    <!-- CARD 3 -->
+    <article class="product-card">
+      <div class="card-img-wrap">
+        <div class="card-img-placeholder">
+         <img src="imagenes-oro/anillos.jpg">
+          </svg>
+        </div>
+        <span class="card-badge badge-green">Aretes</span>
+        <span class="card-num">03</span>
+      </div>
+      <div class="card-body">
+        <p class="card-category">Aretes</p>
+        <h3 class="card-name">Aretes Estrella de Oro</h3>
+        <p class="card-material">Oro 18k · Esmeralda verde</p>
+        <p class="card-desc">Aretes en forma de estrella con piedra esmeralda natural al centro. Cada pieza es única, tallada artesanalmente por orfebres especializados.</p>
+        <div class="card-footer">
+          <div class="card-price">
+            <span>Precio</span>$7,200
+          </div>
+          <a href="#" class="btn-consultar">
+            Consultar
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+              <path d="M2 6h8M6 2l4 4-4 4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </article>
+
+    <!-- CARD 4 -->
+    <article class="product-card">
+      <div class="card-img-wrap">
+        <div class="card-img-placeholder">
+          <img src="imagenes-oro/aretes-cupcakes.jpg">
+          </svg>
+        </div>
+        <span class="card-badge badge-gold">Pulseras</span>
+        <span class="card-num">04</span>
+      </div>
+      <div class="card-body">
+        <p class="card-category">Pulseras</p>
+        <h3 class="card-name">Pulsera Rígida Vintage</h3>
+        <p class="card-material">Oro 18k · Acabado mate</p>
+        <p class="card-desc">Pulsera rígida de diseño geométrico con acabado mate y brillo. Inspirada en el art déco, es una pieza de colección de alto valor artístico.</p>
+        <div class="card-footer">
+          <div class="card-price">
+            <span>Precio</span>$9,400
+          </div>
+          <a href="#" class="btn-consultar">
+            Consultar
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+              <path d="M2 6h8M6 2l4 4-4 4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </article>
+
+    <!-- CARD 5 -->
+    <article class="product-card">
+      <div class="card-img-wrap">
+        <div class="card-img-placeholder">
+          <img src="imagenes-oro/aretes-moñito.jpg">
+          </svg>
+        </div>
+        <span class="card-badge badge-orange">Dijes</span>
+        <span class="card-num">05</span>
+      </div>
+      <div class="card-body">
+        <p class="card-category">Dijes</p>
+        <h3 class="card-name">Dije Sol Radiante</h3>
+        <p class="card-material">Oro 14k · Topacio naranja</p>
+        <p class="card-desc">Dije con forma de sol con 12 rayos y topacio naranja natural al centro. Colgante artesanal con significado espiritual y protector.</p>
+        <div class="card-footer">
+          <div class="card-price">
+            <span>Precio</span>$3,100
+          </div>
+          <a href="#" class="btn-consultar">
+            Consultar
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+              <path d="M2 6h8M6 2l4 4-4 4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </article>
+
+    <!-- CARD 6 -->
+    <article class="product-card">
+      <div class="card-img-wrap">
+        <div class="card-img-placeholder">
+          <img src="imagenes-oro/aretes-gusanito.jpg">
+          </svg>
+        </div>
+        <span class="card-badge badge-green">Broches</span>
+        <span class="card-num">06</span>
+      </div>
+      <div class="card-body">
+        <p class="card-category">Broches</p>
+        <h3 class="card-name">Broche Imperial Verde</h3>
+        <p class="card-material">Oro 18k · Jade natural</p>
+        <p class="card-desc">Broche circular con jade verde natural engarzado en montura de oro. Pieza de lujo que combina elegancia oriental con la orfebrería clásica.</p>
+        <div class="card-footer">
+          <div class="card-price">
+            <span>Precio</span>$15,800
+          </div>
+          <a href="#" class="btn-consultar">
+            Consultar
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+              <path d="M2 6h8M6 2l4 4-4 4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<!-- ══════════ FOOTER ══════════ -->
+<footer>
+  <div class="footer-logo">Ventas <em>ORO</em></div>
+  <div class="footer-div">
+    <div class="orn-line"></div>
+    <div class="orn-diamond" style="width:5px;height:5px;background:var(--gold);transform:rotate(45deg);"></div>
+    <div class="orn-line orn-line-r"></div>
+  </div>
+  <p class="footer-sub">Joyería fina · Oro de ley · Piezas con certificado</p>
+</footer>
+
+</body>
+</html>
